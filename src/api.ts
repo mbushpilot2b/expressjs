@@ -20,5 +20,10 @@ api.get('/hello', (req, res) => {
   res.status(200).send({ message: 'hello world' });
 });
 
+api.post('/data', (req, res) => {
+  res.status(200).send({ message: 'Post request received successfully' });
+});
+
+
 // Version the api
 app.use('/api/v1', api);
