@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import fetch, { Headers, RequestRedirect } from 'node-fetch';
 
 export const app = express();
 
@@ -21,9 +22,30 @@ api.get('/hello', (req, res) => {
 });
 
 api.post('/data', (req, res) => {
-  res.status(200).send({ message: 'Post request received successfully' });
+  const bodyToPassBack = passToApi(req.body);
+  res.status(200).send(bodyToPassBack);
 });
 
 
 // Version the api
 app.use('/api/v1', api);
+
+
+const passToApi = (body) => {
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  var graphql = JSON.stringify(body)
+
+  var requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: graphql,
+    redirect: 'follow' as RequestRedirect
+  };
+
+  return fetch("https://gateway.foxtrax.io/graphql", requestOptions)
+    .then(response => response.text())
+    .then(result => console.log(result))
+    .catch(error => console.log('error', error));
+}
