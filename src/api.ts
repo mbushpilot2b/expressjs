@@ -35,7 +35,7 @@ const passToApi = async (body: any) => {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'http://localhost:4000/graphql',
+      url: 'http:/gateway.foxtrax.io/graphql',
       headers: { 
         'Content-Type': 'application/json'
       },
