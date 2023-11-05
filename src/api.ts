@@ -21,8 +21,8 @@ api.get('/hello', (req, res) => {
   res.status(200).send({ message: 'hello world' });
 });
 
-api.post('/data', (req, res) => {
-  const bodyToPassBack = passToApi(req.body);
+api.post('/data', async (req, res) => {
+  const bodyToPassBack = await passToApi(req.body);
   res.status(200).send(bodyToPassBack);
 });
 
