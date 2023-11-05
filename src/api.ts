@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import fetch, { Headers, RequestRedirect } from 'node-fetch';
+const axios = require('axios');
 
 export const app = express();
 
@@ -30,22 +30,22 @@ api.post('/data', async (req, res) => {
 // Version the api
 app.use('/api/v1', api);
 
+const passToApi = async (body: any) => {
+  try {
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'http://localhost:4000/graphql',
+      headers: { 
+        'Content-Type': 'application/json'
+      },
+      data: JSON.stringify(body)
+    };
 
-const passToApi = (body) => {
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-
-  var graphql = JSON.stringify(body)
-
-  var requestOptions = {
-    method: 'POST',
-    headers: myHeaders,
-    body: graphql,
-    redirect: 'follow' as RequestRedirect
-  };
-
-  return fetch("https://gateway.foxtrax.io/graphql", requestOptions)
-    .then(response => response.text())
-    .then(result => console.log(result))
-    .catch(error => console.log('error', error));
+    const response = await axios.request(config);
+    console.log(JSON.stringify(response.data));
+  }
+  catch (error) {
+    console.log(error);
+  }
 }
